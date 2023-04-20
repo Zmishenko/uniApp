@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.home.HomeFragment">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_name"
+            android:textColor="@color/black"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            tools:text="Перенос"
+    />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_creator_name"
+            android:layout_below="@id/event_name"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            tools:text="ФИО преподавателя"
+            tools:ignore="SmallSp"
+    />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_creator_email"
+            android:layout_below="@id/event_creator_name"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            tools:text="user2@uni-dubna.ru"
+            tools:ignore="SmallSp"
+    />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_creator_text"
+            android:layout_below="@id/event_creator_email"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="Текст преподавателя"
+    />
+</RelativeLayout>

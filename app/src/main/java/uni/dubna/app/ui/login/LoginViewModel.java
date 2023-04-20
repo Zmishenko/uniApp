@@ -1,14 +1,19 @@
 package uni.dubna.app.ui.login;
 
+import android.content.Context;
+import android.content.Intent;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import android.util.Patterns;
 
+import uni.dubna.app.MainActivity;
 import uni.dubna.app.data.LoginRepository;
 import uni.dubna.app.data.Result;
 import uni.dubna.app.data.model.LoggedInUser;
 import uni.dubna.app.R;
+
+import java.time.Instant;
 
 public class LoginViewModel extends ViewModel {
 
@@ -28,16 +33,19 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public Intent login(String username, String password, Context context) {
         // can be launched in a separate asynchronous job
         Result<LoggedInUser> result = loginRepository.login(username, password);
-
+        Intent intent = null;
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            intent = new Intent(context, MainActivity.class);
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
+
+        return intent;
     }
 
     public void loginDataChanged(String username, String password) {

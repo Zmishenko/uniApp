@@ -15,33 +15,40 @@
     <EditText
             android:id="@+id/username"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:minHeight="48dp"
+            android:importantForAutofill="no"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:minHeight="48dp" android:importantForAutofill="no"/>
+            app:layout_constraintTop_toBottomOf="@+id/imageView"/>
 
     <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
+            android:importantForAutofill="no"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username" android:minHeight="48dp"
-            android:importantForAutofill="no"/>
+            app:layout_constraintTop_toBottomOf="@+id/username"/>
 
     <Button
             android:id="@+id/login"
-            android:enabled="false"
+            android:enabled="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -67,5 +74,18 @@
             app:layout_constraintStart_toStartOf="@+id/password"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.3"/>
+    <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/imageView"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="90dp"
+            android:foreground="@drawable/uni_image_foreground"
+            android:contentDescription="TODO"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package uni.dubna.app.ui.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
@@ -103,8 +104,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                    Intent intent = loginViewModel.login(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString(), binding.getRoot().getContext());
+                    try {
+                        startActivity(intent);
+                    } catch (NullPointerException e) {
+
+                    }
                 }
                 return false;
             }
@@ -114,8 +120,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                Intent intent =  loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString(), binding.getRoot().getContext());
+
+                try {
+                    startActivity(intent);
+                } catch (NullPointerException e) {
+
+                }
             }
         });
     }
