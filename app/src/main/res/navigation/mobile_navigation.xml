@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/mobile_navigation"
-            app:startDestination="@+id/nav_home">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
 
     <fragment
-            android:id="@+id/nav_account"
-            android:name="uni.dubna.app.ui.account.AccountFragment"
-            android:label="@string/menu_account"
-            tools:layout="@layout/fragment_account"/>
+        android:id="@+id/nav_account"
+        android:name="uni.dubna.app.ui.account.AccountFragment"
+        android:label="@string/menu_account"
+        tools:layout="@layout/fragment_account" />
     <fragment
-            android:id="@+id/nav_home"
-            android:name="uni.dubna.app.ui.home.HomeFragment"
-            android:label="@string/menu_home"
-            tools:layout="@layout/fragment_home"/>
+        android:id="@+id/nav_home"
+        android:name="uni.dubna.app.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_edit_event2"
+            app:destination="@id/nav_edit_event" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_event"
+        android:name="uni.dubna.app.ui.add_event.AddEventFragment"
+        android:label="@string/Creation"
+        tools:layout="@layout/fragment_add_event" />
+
+    <fragment android:id="@+id/nav_edit_event"
+        android:name="uni.dubna.app.ui.edit_event.EditEventFragment"
+        android:label="@string/change_event"
+        tools:layout="@layout/change_event_item">
+        <argument android:name="event_id" />
+    </fragment>
 </navigation>

@@ -1,6 +1,10 @@
 package uni.dubna.app.data;
 
+import android.content.SharedPreferences;
+
 import uni.dubna.app.data.model.LoggedInUser;
+import uni.dubna.app.data.model.Role;
+import uni.dubna.app.data.model.UserData;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -43,6 +47,26 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
+    public void saveUserData(SharedPreferences preferences, String username, String password, String role) {
+        preferences.edit().putString(USERNAME_PREFERENCES_KEY, username)
+                .putString(PASSWORD_PREFERENCES_KEY,password)
+                .putString(ROLE_PREFERENCES_KEY, role)
+                .apply();
+    }
+
+    public UserData getCachedUserData(SharedPreferences preferences) {
+        String username = preferences.getString(USERNAME_PREFERENCES_KEY,null);
+        String password = preferences.getString(PASSWORD_PREFERENCES_KEY,null);
+        String roleName = preferences.getString(ROLE_PREFERENCES_KEY,null);
+        Role role;
+        if (roleName == null) {
+            role = Role.UNKNOWN;
+        } else {
+            role= Role.valueOf(roleName.toUpperCase());
+        }
+        return new UserData(username,password, role);
+    }
+
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
         Result<LoggedInUser> result = dataSource.login(username, password);
@@ -51,4 +75,8 @@ public class LoginRepository {
         }
         return result;
     }
+
+    private final String USERNAME_PREFERENCES_KEY = "username";
+    private final String PASSWORD_PREFERENCES_KEY = "password";
+    private final String ROLE_PREFERENCES_KEY = "role";
 }

@@ -2,26 +2,27 @@ package uni.dubna.app.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import uni.dubna.app.R;
-import uni.dubna.app.ui.login.LoginViewModel;
-import uni.dubna.app.ui.login.LoginViewModelFactory;
+import uni.dubna.app.data.model.UserData;
 import uni.dubna.app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -32,17 +33,35 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(getApplication()))
                 .get(LoginViewModel.class);
 
+        Bundle b = getIntent().getExtras();
+        if (b != null && b.getBoolean(SHOULD_CLEAR_CACHED_USER_DATA, false)) {
+            loginViewModel.clearUserData();
+        } else {
+            loginViewModel.checkCachedUserData();
+        }
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+        final CheckBox rememberCheckBox = binding.cbRemember;
+
+        loginViewModel.haveCachedUserData.observe(this, new Observer<UserData>() {
+            @Override
+            public void onChanged(UserData userData) {
+                Intent intent = loginViewModel.login(userData.getUsername(), userData.getPassword(), false);
+                try {
+                    startActivity(intent);
+                } catch (NullPointerException e) {
+
+                }
+            }
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -105,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     Intent intent = loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(), binding.getRoot().getContext());
+                            passwordEditText.getText().toString(), rememberCheckBox.isChecked());
                     try {
                         startActivity(intent);
                     } catch (NullPointerException e) {
@@ -120,8 +139,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                Intent intent =  loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(), binding.getRoot().getContext());
+                Intent intent = loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString(), rememberCheckBox.isChecked());
 
                 try {
                     startActivity(intent);
@@ -141,4 +160,7 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
+
+    public static final String SHOULD_CLEAR_CACHED_USER_DATA = "clear_user_data";
 }
