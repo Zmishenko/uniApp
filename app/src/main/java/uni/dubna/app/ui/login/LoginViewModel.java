@@ -2,34 +2,34 @@ package uni.dubna.app.ui.login;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Patterns;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import android.content.SharedPreferences;
-import android.util.Patterns;
-
-import uni.dubna.app.MainActivity;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import uni.dubna.app.R;
 import uni.dubna.app.data.Constants;
 import uni.dubna.app.data.LoginRepository;
-import uni.dubna.app.data.Result;
-import uni.dubna.app.data.model.LoggedInUser;
-import uni.dubna.app.R;
 import uni.dubna.app.data.model.UserData;
-
-import java.time.Instant;
 
 public class LoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    // private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final LoginRepository loginRepository;
+    public MutableLiveData<UserData> haveCachedUserData = new MutableLiveData<>();
+    public MutableLiveData<UserData> onSignedIn = new MutableLiveData<>();
+    public MutableLiveData<String> showErrorToast = new MutableLiveData<>();
 
-    private MutableLiveData<UserData> _haveCachedUserData = new MutableLiveData<>();
-    public LiveData<UserData> haveCachedUserData = _haveCachedUserData;
+    private CompositeDisposable disposable = new CompositeDisposable();
+
 
     LoginViewModel(LoginRepository loginRepository, Application application) {
         super(application);
@@ -40,45 +40,44 @@ public class LoginViewModel extends AndroidViewModel {
         return loginFormState;
     }
 
-    LiveData<LoginResult> getLoginResult() {
-        return loginResult;
-    }
+//    LiveData<LoginResult> getLoginResult() {
+//        return loginResult;
+//    }
 
     private UserData getCachedUserData() {
         return loginRepository.getCachedUserData(getPrefs());
     }
-    public Intent login(String username, String password, boolean remember) {
+
+    public void login(String username, String password, boolean remember) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-        Intent intent = null;
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-
-            if (remember) {
-                loginRepository.saveUserData(getPrefs(), username, password, data.getRole().toString());
-            }
-
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-            intent = new Intent(getApplication(), MainActivity.class)
-                    .putExtra(MainActivity.NAME_ARGUMENT, data.getDisplayName())
-                    .putExtra(MainActivity.ID_ARGUMENT,data.getUserId())
-                    .putExtra(MainActivity.ROLE_ARGUMENT,data.getRole().toString());
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
-
-        return intent;
+        disposable.add(Single.create((SingleOnSubscribe<UserData>) e -> {
+                    try {
+                        UserData userData = loginRepository.login(username, password);
+                        if (remember) {
+                            loginRepository.saveUserData(getPrefs(), username, password, userData.getRole().toString());
+                        }
+                        e.onSuccess(userData);
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(t -> {
+                    onSignedIn.setValue(t);
+                }, e -> showErrorToast.setValue(e.getMessage())));
     }
 
     public void checkCachedUserData() {
         UserData userData = getCachedUserData();
-        if (userData.getUsername()!=null && userData.getPassword() != null) {
-            _haveCachedUserData.setValue(userData);
+        if (userData.getLogin() != null && userData.getPassword() != null) {
+            haveCachedUserData.setValue(userData);
         }
     }
+
     public void clearUserData() {
-        loginRepository.saveUserData(getPrefs(),null,null,null);
+        loginRepository.saveUserData(getPrefs(), null, null, null);
     }
+
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
@@ -87,6 +86,11 @@ public class LoginViewModel extends AndroidViewModel {
         } else {
             loginFormState.setValue(new LoginFormState(true));
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        disposable.dispose();
     }
 
     // A placeholder username validation check

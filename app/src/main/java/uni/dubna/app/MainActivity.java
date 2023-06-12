@@ -2,24 +2,29 @@ package uni.dubna.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
-import uni.dubna.app.data.model.LoggedInUser;
+import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+
 import uni.dubna.app.data.model.Role;
+import uni.dubna.app.data.model.UserData;
 import uni.dubna.app.databinding.ActivityMainBinding;
+import uni.dubna.app.ui.edit_event.EditEventFragment;
 import uni.dubna.app.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
-    private LoggedInUser user;
+    public UserData user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,56 +47,60 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+        View navHeader = binding.navView.getHeaderView(0);
+        ((TextView) navHeader.findViewById(R.id.nav_header_name)).setText(user.getFullName());
+        ((TextView) navHeader.findViewById(R.id.nav_header_mail)).setText(user.getEmail());
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                if (item.getItemId() == R.id.nav_log_out) {
-//                    Intent intent = new Intent(getApplication(), LoginActivity.class).putExtra(LoginActivity.SHOULD_CLEAR_CACHED_USER_DATA, true);
-//                    startActivity(intent);
-//                    finish();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
 
-        if (user.getRole() != Role.TEACHER) {
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_log_out) {
+                Intent intent = new Intent(getApplication(), LoginActivity.class).putExtra(LoginActivity.SHOULD_CLEAR_CACHED_USER_DATA, true);
+                startActivity(intent);
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.nav_account) {
+                Bundle b = new Bundle();
+                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+                navController.navigate(R.id.nav_account, b);
+            }
+            return false;
+        });
+
+        if (user.getRole() == Role.STUDENT) {
             navigationView.getMenu().removeItem(R.id.nav_account);
+        }
+        if (user.getRole() != Role.ADMIN) {
+            navigationView.getMenu().removeItem(R.id.nav_report);
         }
 
         if (user.getRole() == Role.TEACHER || user.getRole() == Role.ADMIN) {
             binding.appBarMain.fab.setVisibility(View.VISIBLE);
-            binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    navController.navigate(R.id.nav_add_event);
-                }
+            binding.appBarMain.fab.setOnClickListener(view -> {
+                Bundle b = new Bundle();
+                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+
+                navController.navigate(R.id.nav_add_event, b);
             });
         }
     }
 
     private void getUserDataFromBundle() {
+
         Bundle b = getIntent().getExtras();
-        String userId = b.getString(ID_ARGUMENT);
-        if (userId == null) throw new RuntimeException(CANNOT_BE_NULL_ERROR);
+        String userJson = b.getString(USER_ARGUMENT);
+        if (userJson == null) throw new RuntimeException(CANNOT_BE_NULL_ERROR);
+        user = new Gson().fromJson(userJson, UserData.class);
 
-        String name = b.getString(NAME_ARGUMENT);
-        if (name == null) throw new RuntimeException(CANNOT_BE_NULL_ERROR);
-
-        String role = b.getString(ROLE_ARGUMENT);
-        if (role == null) throw new RuntimeException(CANNOT_BE_NULL_ERROR);
-
-        user = new LoggedInUser(userId, name, Role.valueOf(role.toUpperCase()));
     }
 
     @Override
@@ -108,9 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public static final String ID_ARGUMENT = "user_id";
-    public static final String NAME_ARGUMENT = "name";
-    public static final String ROLE_ARGUMENT = "role";
+    public static final String USER_ARGUMENT = "user";
 
     private static final String CANNOT_BE_NULL_ERROR = "This arg cannot be null";
 

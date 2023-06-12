@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="uni">#58638E</color>
+    <color name="cardview_background">#E2E2E4</color>
+    <color name="option_background">#F4F4F5</color>
 </resources>

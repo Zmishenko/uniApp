@@ -12,42 +12,76 @@
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp">
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_event_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:letterSpacing="0.1"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Перенос" />
 
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_when"
-            android:textSize="20sp"
+        <ImageView
+            android:id="@+id/iv_book"
+            android:layout_width="22dp"
+            android:layout_height="0dp"
+            android:src="@drawable/book"
+            app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_event_type" />
+            app:layout_constraintTop_toTopOf="@id/tv_subject" />
+
+        <ImageView
+            android:id="@+id/iv_time"
+            android:layout_width="22dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_time"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_date" />
 
         <TextView
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:textSize="19sp"
+            app:layout_constraintStart_toEndOf="@id/iv_time"
+            app:layout_constraintTop_toBottomOf="@id/tv_subject"
+            tools:text="с 4 занятие переносится, дата проведения будет указана позже" />
+
+        <TextView
+            android:layout_marginTop="4dp"
             android:id="@+id/tv_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@string/event_subject"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date" />
+            android:textSize="19sp"
+            app:layout_constraintStart_toEndOf="@id/iv_book"
+            app:layout_constraintTop_toBottomOf="@id/tv_event_type" />
 
         <TextView
-            android:id="@+id/tv_who"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_reason"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/event_who"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_subject" />
+            android:layout_marginTop="4dp"
+            android:text="@string/event_reason"
+            android:textSize="19sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_subject"
+            app:layout_constraintTop_toBottomOf="@id/tv_date" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

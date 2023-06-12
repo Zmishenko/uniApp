@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,58 +12,92 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.ui.NavigationUI;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
+import uni.dubna.app.MainActivity;
+import uni.dubna.app.R;
+import uni.dubna.app.data.model.Role;
+import uni.dubna.app.data.model.UserData;
 import uni.dubna.app.databinding.FragmentAccountBinding;
-import uni.dubna.app.ui.event.EventInfo;
+import uni.dubna.app.databinding.FragmentHomeBinding;
+import uni.dubna.app.ui.edit_event.EditEventFragment;
+import uni.dubna.app.ui.event.Event;
+import uni.dubna.app.ui.event.EventAdapter;
 import uni.dubna.app.ui.event.EventType;
+import uni.dubna.app.ui.event.MyItemDecoration;
+import uni.dubna.app.ui.home.HomeViewModel;
+import uni.dubna.app.ui.home.HomeViewModelFactory;
 
 public class AccountFragment extends Fragment {
+    private FragmentHomeBinding binding;
+    private RecyclerView recyclerView;
+    private HomeViewModel viewModel;
+    private EventAdapter adapter;
 
-    private ArrayList<EventInfo> eventInfos = new ArrayList<>();
-    private FragmentAccountBinding binding;
+    private UserData user;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this, new HomeViewModelFactory()).get(HomeViewModel.class);
+
+        recyclerView = view.findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new MyItemDecoration());
+        adapter = new EventAdapter(id -> {
+            if (user.getRole() != Role.STUDENT) {
+                Bundle b = new Bundle();
+                Event event = null;
+                for (int i = 0; i < adapter.getCurrentList().size(); i++) {
+                    if (Objects.equals(adapter.getCurrentList().get(i).getId(), id)) {
+                        event = adapter.getCurrentList().get(i);
+                    }
+                }
+                b.putString(EditEventFragment.EVENT_ARG, new Gson().toJson(event));
+                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+
+                navController.navigate(R.id.nav_edit_event, b);
+            }
+
+        }, user.getRole(), true);
+        recyclerView.setAdapter(adapter);
+
+        viewModel.requestEventList();
+
+        viewModel.eventList.observe(getViewLifecycleOwner(), events -> {
+            adapter.submitList(events);
+        });
+
+        viewModel.showErrorToast.observe(getViewLifecycleOwner(), s -> {
+            Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        user = ((MainActivity) requireActivity()).user;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        AccountViewModel accountFragmernt =
-                new ViewModelProvider(this).get(AccountViewModel.class);
-
-        binding = FragmentAccountBinding.inflate(inflater, container, false);
-
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle("Павел Александрович Павлов");
-        initEventList();
-        AccountAdapter adapter = new AccountAdapter(eventInfos);
-        binding.rv.setAdapter(adapter);
-        binding.rv.addItemDecoration(new AccountAdapter.ItemDecoration(10));
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
-
-    private void initEventList() {
-        Random random = new Random(1);
-        for (int i = 0; i < 20; i++) {
-            EventInfo eventInfo = new EventInfo();
-            if (random.nextBoolean()) {
-                eventInfo.setEventType(EventType.REPLACEMENT);
-            } else {
-                eventInfo.setEventType(EventType.SHIFT);
-            }
-            eventInfo.setDate("25 окт 2022");
-            eventInfo.setSubject("ТАФЯ");
-
-            eventInfo.setWhoIsReplaced("Анна Петровна Петрова");
-            eventInfos.add(eventInfo);
-        }
-    }
-
 }

@@ -1,32 +1,27 @@
 package uni.dubna.app.data;
 
-import uni.dubna.app.data.model.LoggedInUser;
-import uni.dubna.app.data.model.Role;
-
-import java.io.IOException;
+import retrofit2.Response;
+import uni.dubna.app.data.model.UserData;
+import uni.dubna.app.data.retrofit.UserService;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
 
-    public Result<LoggedInUser> login(String username, String password) {
+    private final UserService userService;
 
-        try {
-            // TODO: handle loggedInUser authentication
-            //TODO: set correct Role
-            Role role = Role.TEACHER;
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe", role);
-            return new Result.Success<>(fakeUser);
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
-        }
+    public LoginDataSource(UserService userService) {
+        this.userService = userService;
     }
 
-    public void logout() {
-        // TODO: revoke authentication
+    public UserData login(String username, String password) throws Exception {
+        Response<UserData> userDataCall = userService.login(username, password).execute();
+        UserData userData = userDataCall.body();
+        if (userData == null) {
+            throw new Exception("Неправильный логин/пароль");
+        }
+
+        return userData;
     }
 }

@@ -1,48 +1,112 @@
 package uni.dubna.app.ui.event;
 
+import androidx.annotation.Nullable;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Objects;
+
 public class Event {
 
-    private String eventName;
-    private String creatorName;
-    private String creatorEmail;
-    private String creatorMessage;
+    @SerializedName("id")
+    private Long id;
+    @SerializedName("type")
+    private EventType eventType;
+    @SerializedName("fio")
+    private String teacherName;
+    @SerializedName("grpupsNum")
+    private String group;
 
-    public Event(String eventName, String creatorName, String creatorEmail, String creatorMessage) {
-        this.eventName = eventName;
-        this.creatorName = creatorName;
-        this.creatorEmail = creatorEmail;
-        this.creatorMessage = creatorMessage;
+    @SerializedName("reason")
+    private String reason;
+
+    public String getSubject() {
+        return subject;
     }
 
-    public String getEventName() {
-        return eventName;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public Long getId() {
+        return id;
     }
 
-    public String getCreatorName() {
-        return creatorName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCreatorName(String creatorName) {
-        this.creatorName = creatorName;
+    @SerializedName("dateFrom")
+    private String dateFrom;
+
+    @SerializedName("dateTo")
+    private String dateTo;
+
+    @SerializedName("predmet")
+    private String subject;
+
+    public String getGroup() {
+        return group;
     }
 
-    public String getCreatorEmail() {
-        return creatorEmail;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    public void setCreatorEmail(String creatorEmail) {
-        this.creatorEmail = creatorEmail;
+    public String getReason() {
+        return reason;
     }
 
-    public String getCreatorMessage() {
-        return creatorMessage;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    public void setCreatorMessage(String creatorMessage) {
-        this.creatorMessage = creatorMessage;
+    public String getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(String dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public String getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(String dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public Event(EventType eventName, String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public Event(){}
+
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof Event) {
+            return Objects.equals(id, ((Event) obj).id) && Objects.equals(eventType, ((Event) obj).getEventType()) && Objects.equals(teacherName, ((Event) obj).getTeacherName()) &&
+                    Objects.equals(group, ((Event) obj).getGroup()) && Objects.equals(reason, ((Event) obj).getReason()) && Objects.equals(subject, ((Event) obj).getSubject());
+        }
+
+        return false;
     }
 }

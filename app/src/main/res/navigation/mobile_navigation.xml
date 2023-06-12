@@ -14,7 +14,7 @@
         android:id="@+id/nav_home"
         android:name="uni.dubna.app.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_edit_event2"
             app:destination="@id/nav_edit_event" />
@@ -22,14 +22,18 @@
 
     <fragment
         android:id="@+id/nav_add_event"
-        android:name="uni.dubna.app.ui.add_event.AddEventFragment"
+        android:name="uni.dubna.app.ui.edit_event.EditEventFragment"
         android:label="@string/Creation"
-        tools:layout="@layout/fragment_add_event" />
+        tools:layout="@layout/fragment_add_event">
+        <argument android:name="user" />
+    </fragment>
 
-    <fragment android:id="@+id/nav_edit_event"
+    <fragment
+        android:id="@+id/nav_edit_event"
         android:name="uni.dubna.app.ui.edit_event.EditEventFragment"
         android:label="@string/change_event"
-        tools:layout="@layout/change_event_item">
+        tools:layout="@layout/fragment_add_event">
         <argument android:name="event_id" />
+        <argument android:name="user" />
     </fragment>
 </navigation>
