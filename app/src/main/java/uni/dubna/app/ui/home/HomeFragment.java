@@ -41,6 +41,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        NavController navController = Navigation.findNavController(requireView());
+
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.TEACHER) {
+            binding.homeFab.setVisibility(View.VISIBLE);
+            binding.homeFab.setOnClickListener(v -> {
+                Bundle b = new Bundle();
+                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+
+                navController.navigate(R.id.nav_add_event, b);
+            });
+        }
         viewModel = new ViewModelProvider(this, new HomeViewModelFactory()).get(HomeViewModel.class);
 
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -57,7 +69,6 @@ public class HomeFragment extends Fragment {
                 }
                 b.putString(EditEventFragment.EVENT_ARG, new Gson().toJson(event));
                 b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
 
                 navController.navigate(R.id.nav_edit_event, b);
             }
@@ -80,17 +91,6 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = ((MainActivity) requireActivity()).user;
-    }
-
-    private void deinitialize() {
-//        eventList = new ArrayList<>();
-//        eventList.add(new Event("Перенос1", "ФИО преподавателя", "почта@uni-dubna.ru", "Переношу пару на завтра"));
-//        eventList.add(new Event("Перенос2", "ФИО преподавателя", "почта@uni-dubna.ru", "Переношу пару на завтра"));
-//        eventList.add(new Event("Замена3", "ФИО преподавателя", "почта@uni-dubna.ru", "Завтра меня будет заменять ФИО преподавателя"));
-//        eventList.add(new Event("Перенос4", "ФИО преподавателя", "почта@uni-dubna.ru", "Завтра пары не будет, проведем через неделю"));
-//        eventList.add(new Event("Замена5", "ФИО преподавателя", "почта@uni-dubna.ru", "Завтра меня будет заменять ФИО преподавателя"));
-//        eventList.add(new Event("Перенос6", "ФИО преподавателя", "почта@uni-dubna.ru", "Завтра пары не будет, конкретную дату сообщу позже"));
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

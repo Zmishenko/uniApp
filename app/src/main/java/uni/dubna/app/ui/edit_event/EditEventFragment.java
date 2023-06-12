@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,6 +62,21 @@ public class EditEventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.addFab.setOnClickListener(v -> {
+            View options = LayoutInflater.from(requireContext()).inflate(R.layout.params_options, null);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            int px = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    12,
+                    getResources().getDisplayMetrics()
+            );
+            params.setMargins(0, px, 0, 0);
+            options.setLayoutParams(params);
+            binding.llParams.addView(options);
+        });
 
         hideMenu();
         observeToasts();
@@ -207,23 +225,26 @@ public class EditEventFragment extends Fragment {
         });
 
         if (event != null) {
-            binding.cvDateFrom.paramItemEt.setText(event.getDateFrom());
-            binding.cvDateTo.paramItemEt.setText(event.getDateTo());
-            binding.cvDis.paramItemEt.setText(event.getSubject());
-            binding.cvGroup.paramItemEt.setText(event.getGroup());
+            binding.cvParams.cvDateFrom.paramItemEt.setText(event.getDateFrom());
+            binding.cvParams.cvDateTo.paramItemEt.setText(event.getDateTo());
+            binding.cvParams.cvDis.paramItemEt.setText(event.getSubject());
+            binding.cvParams.cvGroup.paramItemEt.setText(event.getGroup());
         }
 
 
         binding.save.setOnClickListener(v -> {
-            String dateFrom = binding.cvDateFrom.paramItemEt.getText().toString();
-            String dateTo = binding.cvDateTo.paramItemEt.getText().toString();
-            String group = binding.cvGroup.paramItemEt.getText().toString();
-            String subject = binding.cvDis.paramItemEt.getText().toString();
+            for (int i = 0; i < binding.llParams.getChildCount(); i++) {
+                View view = binding.llParams.getChildAt(i);
+                String dateFrom = ((TextView) view.findViewById(R.id.cv_date_from).findViewById(R.id.param_item_et)).getText().toString();
+                String dateTo = ((TextView) view.findViewById(R.id.cv_date_to).findViewById(R.id.param_item_et)).getText().toString();
+                String group = ((TextView) view.findViewById(R.id.cv_group).findViewById(R.id.param_item_et)).getText().toString();
+                String subject = ((TextView) view.findViewById(R.id.cv_dis).findViewById(R.id.param_item_et)).getText().toString();
 
-            viewModel.changeDateFrom(dateFrom);
-            viewModel.changeDateTo(dateTo);
-            viewModel.changeGroup(group);
-            viewModel.changeSubject(subject);
+                viewModel.changeDateFrom(dateFrom, i);
+                viewModel.changeDateTo(dateTo, i);
+                viewModel.changeGroup(group, i);
+                viewModel.changeSubject(subject, i);
+            }
 
             viewModel.save();
         });

@@ -7,7 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 @Keep
 public enum Role {
-   @SerializedName("student") STUDENT,@SerializedName("teacher") TEACHER,@SerializedName("admin") ADMIN, UNKNOWN,
+    @SerializedName("student") STUDENT,
+    @SerializedName("teacher") TEACHER,
+    @SerializedName("admin") ADMIN,
+    UNKNOWN,
     ;
 
     @NonNull

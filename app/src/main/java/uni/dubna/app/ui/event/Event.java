@@ -109,4 +109,16 @@ public class Event {
 
         return false;
     }
+
+    public Event copy() {
+        Event event = new Event();
+        event.setGroup(group);
+        event.setEventType(eventType);
+        event.setSubject(subject);
+        event.setReason(reason);
+        event.setTeacherName(teacherName);
+        event.setDateTo(dateTo);
+        event.setDateFrom(dateFrom);
+        return event;
+    }
 }

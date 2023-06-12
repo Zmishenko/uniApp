@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/cardview_background"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_params"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Заполните параметры"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/params_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="С какого числа перенести"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/cv_date_from"
+            app:layout_constraintStart_toStartOf="@id/cv_date_from"
+            app:layout_constraintTop_toBottomOf="@id/tv_params" />
+
+        <include
+            android:id="@+id/cv_date_from"
+            layout="@layout/param_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toStartOf="@+id/cv_date_to"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/params_from" />
+
+        <TextView
+            android:id="@+id/params_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="На какое число перенести"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/cv_date_to"
+            app:layout_constraintStart_toStartOf="@+id/cv_date_to"
+            app:layout_constraintTop_toTopOf="@id/params_from" />
+
+        <include
+            android:id="@+id/cv_date_to"
+            layout="@layout/param_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cv_date_from"
+            app:layout_constraintTop_toBottomOf="@id/params_from" />
+
+
+        <TextView
+            android:id="@+id/params_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Укажите номер группы"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/cv_group"
+            app:layout_constraintStart_toStartOf="@id/cv_group"
+            app:layout_constraintTop_toBottomOf="@id/cv_date_from" />
+
+        <include
+            android:id="@+id/cv_group"
+            layout="@layout/param_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toStartOf="@+id/cv_dis"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/params_group" />
+
+        <TextView
+            android:id="@+id/params_dis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Укажите дисциплину"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/cv_dis"
+            app:layout_constraintStart_toStartOf="@+id/cv_dis"
+            app:layout_constraintTop_toBottomOf="@id/cv_date_to" />
+
+        <include
+            android:id="@+id/cv_dis"
+            layout="@layout/param_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cv_group"
+            app:layout_constraintTop_toBottomOf="@id/params_dis" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

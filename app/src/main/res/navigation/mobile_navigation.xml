@@ -15,9 +15,6 @@
         android:name="uni.dubna.app.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_nav_home_to_nav_edit_event2"
-            app:destination="@id/nav_edit_event" />
     </fragment>
 
     <fragment

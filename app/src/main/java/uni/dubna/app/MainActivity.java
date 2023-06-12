@@ -67,11 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplication(), LoginActivity.class).putExtra(LoginActivity.SHOULD_CLEAR_CACHED_USER_DATA, true);
                 startActivity(intent);
                 finish();
+                drawer.close();
                 return true;
             } else if (item.getItemId() == R.id.nav_account) {
                 Bundle b = new Bundle();
                 b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
                 navController.navigate(R.id.nav_account, b);
+                drawer.close();
+                return  true;
             }
             return false;
         });
@@ -83,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().removeItem(R.id.nav_report);
         }
 
-        if (user.getRole() == Role.TEACHER || user.getRole() == Role.ADMIN) {
-            binding.appBarMain.fab.setVisibility(View.VISIBLE);
-            binding.appBarMain.fab.setOnClickListener(view -> {
-                Bundle b = new Bundle();
-                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
-
-                navController.navigate(R.id.nav_add_event, b);
-            });
-        }
+//        if (user.getRole() == Role.TEACHER || user.getRole() == Role.ADMIN) {
+//            binding.appBarMain.fab.setVisibility(View.VISIBLE);
+//            binding.appBarMain.fab.setOnClickListener(view -> {
+//                Bundle b = new Bundle();
+//                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+//
+//                navController.navigate(R.id.nav_add_event, b);
+//            });
+//        }
     }
 
     private void getUserDataFromBundle() {

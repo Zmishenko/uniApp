@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -19,25 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 import uni.dubna.app.MainActivity;
 import uni.dubna.app.R;
 import uni.dubna.app.data.model.Role;
 import uni.dubna.app.data.model.UserData;
-import uni.dubna.app.databinding.FragmentAccountBinding;
 import uni.dubna.app.databinding.FragmentHomeBinding;
 import uni.dubna.app.ui.edit_event.EditEventFragment;
 import uni.dubna.app.ui.event.Event;
 import uni.dubna.app.ui.event.EventAdapter;
-import uni.dubna.app.ui.event.EventType;
 import uni.dubna.app.ui.event.MyItemDecoration;
 import uni.dubna.app.ui.home.HomeViewModel;
 import uni.dubna.app.ui.home.HomeViewModelFactory;
 
 public class AccountFragment extends Fragment {
+
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private HomeViewModel viewModel;
@@ -48,6 +43,18 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        NavController navController = Navigation.findNavController(requireView());
+
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.TEACHER) {
+            binding.homeFab.setVisibility(View.VISIBLE);
+            binding.homeFab.setOnClickListener(v -> {
+                Bundle b = new Bundle();
+                b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
+
+                navController.navigate(R.id.nav_add_event, b);
+            });
+        }
         viewModel = new ViewModelProvider(this, new HomeViewModelFactory()).get(HomeViewModel.class);
 
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -64,7 +71,6 @@ public class AccountFragment extends Fragment {
                 }
                 b.putString(EditEventFragment.EVENT_ARG, new Gson().toJson(event));
                 b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
 
                 navController.navigate(R.id.nav_edit_event, b);
             }

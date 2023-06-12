@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/cl_add_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp">
 
@@ -17,8 +19,7 @@
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/cardview_background"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
-            app:layout_constraintTop_toTopOf="parent">
+            app:cardElevation="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -95,8 +96,7 @@
             android:layout_marginTop="12dp"
             app:cardBackgroundColor="@color/cardview_background"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
-            app:layout_constraintTop_toBottomOf="@id/cv_reason">
+            app:cardElevation="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -157,140 +157,41 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_params"
+        <LinearLayout
+            android:id="@+id/ll_params"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardBackgroundColor="@color/cardview_background"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
-            app:layout_constraintTop_toBottomOf="@id/cv_event">
+            android:layout_height="wrap_content">
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
+                android:id="@+id/cv_params"
+                layout="@layout/params_options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
-
-                <TextView
-                    android:id="@+id/tv_params"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Заполните параметры"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/params_from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="С какого числа перенести"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@id/cv_date_from"
-                    app:layout_constraintStart_toStartOf="@id/cv_date_from"
-                    app:layout_constraintTop_toBottomOf="@id/tv_params" />
-
-                <include
-                    android:id="@+id/cv_date_from"
-                    layout="@layout/param_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/circle"
-                    app:layout_constraintEnd_toStartOf="@+id/cv_date_to"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/params_from" />
-
-                <TextView
-                    android:id="@+id/params_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="На какое число перенести"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@id/cv_date_to"
-                    app:layout_constraintStart_toStartOf="@+id/cv_date_to"
-                    app:layout_constraintTop_toTopOf="@id/params_from" />
-
-                <include
-                    android:id="@+id/cv_date_to"
-                    layout="@layout/param_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/circle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/cv_date_from"
-                    app:layout_constraintTop_toBottomOf="@id/params_from" />
-
-
-                <TextView
-                    android:id="@+id/params_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Укажите номер группы"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@id/cv_group"
-                    app:layout_constraintStart_toStartOf="@id/cv_group"
-                    app:layout_constraintTop_toBottomOf="@id/cv_date_from" />
-
-                <include
-                    android:id="@+id/cv_group"
-                    layout="@layout/param_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/circle"
-                    app:layout_constraintEnd_toStartOf="@+id/cv_dis"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/params_group" />
-
-                <TextView
-                    android:id="@+id/params_dis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Укажите дисциплину"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+id/cv_dis"
-                    app:layout_constraintStart_toStartOf="@+id/cv_dis"
-                    app:layout_constraintTop_toBottomOf="@id/cv_date_to" />
-
-                <include
-                    android:id="@+id/cv_dis"
-                    layout="@layout/param_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/circle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/cv_group"
-                    app:layout_constraintTop_toBottomOf="@id/params_dis" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="16dp"
+            android:visibility="visible"
+            app:backgroundTint="@color/uni"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_add" />
 
         <Button
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Сохранить"
-            app:layout_constraintTop_toBottomOf="@id/cv_params" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="Сохранить" />
+
+
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
