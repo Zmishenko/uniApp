@@ -245,7 +245,7 @@ public class EditEventFragment extends Fragment {
 
                 viewModel.changeDateFrom(dateFrom, i);
                 viewModel.changeDateTo(dateTo, i);
-                if (event.getEventType() == EventType.SHIFT) viewModel.changeGroup(group, i);
+                if (viewModel.eventInfo.getValue().getEventType() == EventType.SHIFT) viewModel.changeGroup(group, i);
                 else viewModel.changeTeacherName(group, i);
                 viewModel.changeSubject(subject, i);
             }
