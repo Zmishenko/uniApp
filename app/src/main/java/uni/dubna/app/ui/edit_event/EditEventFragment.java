@@ -3,7 +3,6 @@ package uni.dubna.app.ui.edit_event;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -244,9 +242,13 @@ public class EditEventFragment extends Fragment {
                 String subject = ((TextView) view.findViewById(R.id.cv_dis).findViewById(R.id.param_item_et)).getText().toString();
 
                 viewModel.changeDateFrom(dateFrom, i);
-                viewModel.changeDateTo(dateTo, i);
-                if (viewModel.eventInfo.getValue().getEventType() == EventType.SHIFT) viewModel.changeGroup(group, i);
-                else viewModel.changeTeacherName(group, i);
+                if (viewModel.eventInfo.getValue().getEventType() == EventType.SHIFT) {
+                    viewModel.changeDateTo(dateTo, i);
+                    viewModel.changeGroup(group, i);
+                } else {
+                    viewModel.changeGroup(dateTo, i);
+                    viewModel.changeTeacherName(group, i);
+                }
                 viewModel.changeSubject(subject, i);
             }
 
@@ -261,6 +263,9 @@ public class EditEventFragment extends Fragment {
         for (int i = 0; i < binding.llParams.getChildCount(); i++) {
             View view = binding.llParams.getChildAt(i);
             ((TextView) view.findViewById(R.id.params_group)).setText(shouldChangeToTeacherParam ? "ФИО преподавателя" : "Укажите номер группы");
+            ((TextView) view.findViewById(R.id.params_to)).setText(shouldChangeToTeacherParam ? "Укажите номер группы" : "На какое число перенести");
+            ((TextView) view.findViewById(R.id.params_from)).setText(shouldChangeToTeacherParam ? "Какого числа будет замена" : "С какого числа перенести");
+
         }
     }
 
