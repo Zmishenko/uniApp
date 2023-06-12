@@ -112,6 +112,7 @@ public class Event {
 
     public Event copy() {
         Event event = new Event();
+        event.setId(id);
         event.setGroup(group);
         event.setEventType(eventType);
         event.setSubject(subject);

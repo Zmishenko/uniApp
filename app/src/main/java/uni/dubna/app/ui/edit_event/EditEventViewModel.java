@@ -69,7 +69,6 @@ public class EditEventViewModel extends ViewModel {
     private void addNewParam(int index) {
         if (params.size() - 1 < index) {
             Event event = commonEvent.copy();
-            event.setId((long) index);
             params.add(event);
         }
     }
@@ -87,6 +86,12 @@ public class EditEventViewModel extends ViewModel {
         addNewParam(index);
         Event event = params.get(index);
         event.setGroup(group);
+    }
+
+    public void changeTeacherName(String teacherName, int index) {
+        addNewParam(index);
+        Event event = params.get(index);
+        event.setTeacherName(teacherName);
     }
 
     public void changeSubject(String subject, int index) {

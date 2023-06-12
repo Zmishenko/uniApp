@@ -33,6 +33,7 @@
     <string name="event_when">С %1$s занятие </string>
     <string name="event_subject">Предмет: %1$s</string>
     <string name="event_reason">Причина: %1$s</string>
+    <string name="event_group">Группа: %1$s</string>
     <string name="change_event">Редактирование уведомления</string>
 
     <string name="reason_health">Б/Л (больничный)</string>

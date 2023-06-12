@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import uni.dubna.app.data.model.UserData;
 import uni.dubna.app.databinding.FragmentAddEventBinding;
 import uni.dubna.app.databinding.OptionItemBinding;
 import uni.dubna.app.ui.event.Event;
+import uni.dubna.app.ui.event.EventType;
 
 public class EditEventFragment extends Fragment {
     private FragmentAddEventBinding binding;
@@ -76,6 +78,7 @@ public class EditEventFragment extends Fragment {
             params.setMargins(0, px, 0, 0);
             options.setLayoutParams(params);
             binding.llParams.addView(options);
+            changeParams(viewModel.eventInfo.getValue().getEventType());
         });
 
         hideMenu();
@@ -159,8 +162,8 @@ public class EditEventFragment extends Fragment {
                 changeReasonBackground(getReason(event.getReason()));
             }
             if (getSelectedEvent() == null || event.getEventType().toString() != getSelectedEvent().optionItemTitle.getText()) {
-                Log.d("PresentLayer", "no");
                 changeEventBackground(getEvent(event.getEventType().toString()));
+                changeParams(event.getEventType());
             }
         });
 
@@ -242,13 +245,23 @@ public class EditEventFragment extends Fragment {
 
                 viewModel.changeDateFrom(dateFrom, i);
                 viewModel.changeDateTo(dateTo, i);
-                viewModel.changeGroup(group, i);
+                if (event.getEventType() == EventType.SHIFT) viewModel.changeGroup(group, i);
+                else viewModel.changeTeacherName(group, i);
                 viewModel.changeSubject(subject, i);
             }
 
             viewModel.save();
         });
 
+    }
+
+    private void changeParams(EventType type) {
+        boolean shouldChangeToTeacherParam = type == EventType.REPLACEMENT || type == EventType.REPLACEMENT_SHIFT;
+
+        for (int i = 0; i < binding.llParams.getChildCount(); i++) {
+            View view = binding.llParams.getChildAt(i);
+            ((TextView) view.findViewById(R.id.params_group)).setText(shouldChangeToTeacherParam ? "ФИО преподавателя" : "Укажите номер группы");
+        }
     }
 
     @SuppressLint("NewApi")

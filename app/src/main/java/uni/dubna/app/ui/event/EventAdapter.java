@@ -50,6 +50,7 @@ public class EventAdapter extends ListAdapter<Event, EventAdapter.EventViewHolde
         holder.binding.tvSubject.setText(context.getString(R.string.event_subject, event.getSubject()));
         holder.binding.tvEventType.setText(event.getEventType().toString());
         holder.binding.tvReason.setText(context.getString(R.string.event_reason, event.getReason()));
+        holder.binding.tvGroup.setText(context.getString(R.string.event_group, event.getGroup()));
 
         switch (event.getEventType()) {
             case REPLACEMENT:
