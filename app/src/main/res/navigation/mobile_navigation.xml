@@ -18,6 +18,13 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_report"
+        android:name="uni.dubna.app.ui.report.ReportFragment"
+        android:label="@string/menu_report"
+        tools:layout="@layout/fragment_report">
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_add_event"
         android:name="uni.dubna.app.ui.edit_event.EditEventFragment"
         android:label="@string/Creation"

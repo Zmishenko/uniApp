@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 public enum EventType {
-    @SerializedName("Замена") REPLACEMENT,@SerializedName("Перенос") SHIFT,@SerializedName("Перенос с заменой") REPLACEMENT_SHIFT,
+    @SerializedName("Замена") REPLACEMENT, @SerializedName("Перенос") SHIFT, @SerializedName("Перенос с заменой") REPLACEMENT_SHIFT,
     ;
 
     @NonNull
@@ -23,9 +23,15 @@ public enum EventType {
     }
 
     public static EventType fromString(String eventType) {
-        if (eventType.equals("Замена")) return EventType.REPLACEMENT;
-        if (eventType.equals("Перенос")) return EventType.SHIFT;
-        if (eventType.equals("Перенос с заменой")) return EventType.REPLACEMENT_SHIFT;
-        throw  new RuntimeException("Unknown event type");
+        if (eventType.contains("Замена")) return EventType.REPLACEMENT;
+        if (eventType.contains("Перенос")) return EventType.SHIFT;
+        if (eventType.contains("Перенос с заменой")) return EventType.REPLACEMENT_SHIFT;
+        throw new RuntimeException("Unknown event type");
+    }
+
+    public static boolean contains(String eventType) {
+        return eventType.contains(EventType.SHIFT.toString()) ||
+                eventType.contains(EventType.REPLACEMENT.toString()) ||
+                eventType.contains(EventType.REPLACEMENT_SHIFT.toString());
     }
 }

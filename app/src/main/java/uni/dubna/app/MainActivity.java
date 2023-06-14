@@ -74,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 b.putString(EditEventFragment.USER_ARG, new Gson().toJson(user));
                 navController.navigate(R.id.nav_account, b);
                 drawer.close();
-                return  true;
+                return true;
+            } else if (item.getItemId() == R.id.nav_report) {
+                navController.navigate(R.id.nav_report);
+                drawer.close();
+                return true;
             }
             return false;
         });

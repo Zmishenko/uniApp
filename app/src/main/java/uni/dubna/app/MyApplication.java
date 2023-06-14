@@ -5,6 +5,7 @@ import android.app.Application;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uni.dubna.app.data.retrofit.EventService;
+import uni.dubna.app.data.retrofit.ReportService;
 import uni.dubna.app.data.retrofit.UserService;
 
 public class MyApplication extends Application {
@@ -21,5 +22,9 @@ public class MyApplication extends Application {
 
     public static EventService getEventService() {
         return getRetrofitInstance().create(EventService.class);
+    }
+
+    public static ReportService getReportService() {
+        return getRetrofitInstance().create(ReportService.class);
     }
 }
