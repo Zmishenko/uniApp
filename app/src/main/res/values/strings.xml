@@ -40,5 +40,10 @@
     <string name="reason_rest">Отпуск</string>
     <string name="reason_command">Командировка</string>
     <string name="reason_other">Другое</string>
-
+    
+    <string-array name="lesson_status">
+        <item>Восстановлено</item>
+        <item>Невосстановлено</item>
+        <item>-</item>
+    </string-array>
 </resources>

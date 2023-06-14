@@ -12,6 +12,7 @@ import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import uni.dubna.app.data.ReportRepository;
+import uni.dubna.app.data.model.Filter;
 import uni.dubna.app.ui.event.Event;
 
 public class ReportViewModel extends ViewModel {
@@ -28,11 +29,11 @@ public class ReportViewModel extends ViewModel {
         this.reportRepository = reportRepository;
     }
 
-    public void requestEventList(Event event) {
+    public void requestEventList(Filter filter) {
         disposable.clear();
         disposable.add(Single.create((SingleOnSubscribe<List<Event>>) e -> {
                     try {
-                        List<Event> eventList1 = reportRepository.getFilteredEventList(event);
+                        List<Event> eventList1 = reportRepository.getFilteredEventList(filter);
 
                         e.onSuccess(eventList1);
                     } catch (Exception ex) {

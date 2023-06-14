@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Response;
+import uni.dubna.app.data.model.Filter;
 import uni.dubna.app.data.retrofit.ReportService;
 import uni.dubna.app.ui.event.Event;
 
@@ -14,7 +15,7 @@ public class ReportRepository {
         this.reportService = reportService;
     }
 
-    public List<Event> getFilteredEventList(Event event) throws Exception {
+    public List<Event> getFilteredEventList(Filter filter) throws Exception {
         Response<List<Event>> eventListResponse = reportService.getFilteredEventList().execute();
         if (eventListResponse.isSuccessful()) {
             List<Event> eventList = eventListResponse.body();

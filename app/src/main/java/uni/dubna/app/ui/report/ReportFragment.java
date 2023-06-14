@@ -1,9 +1,11 @@
 package uni.dubna.app.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import java.util.Objects;
 
 import uni.dubna.app.MainActivity;
 import uni.dubna.app.R;
+import uni.dubna.app.data.model.Filter;
 import uni.dubna.app.data.model.Role;
 import uni.dubna.app.data.model.UserData;
 import uni.dubna.app.databinding.FragmentReportBinding;
@@ -90,34 +93,31 @@ public class ReportFragment extends Fragment {
 
     private void initViewListeners() {
         binding.btnAccept.setOnClickListener(v -> {
-            Event event = new Event();
+            Filter filter = new Filter();
 
             String groups = binding.cvGroup.paramItemEt.getText().toString();
             if (!groups.isEmpty()) {
-                event.setGroup(groups);
+                filter.setGroups(groups);
             }
             String eventType = binding.cvEventType.paramItemEt.getText().toString();
             if (!eventType.isEmpty()) {
-                if (!EventType.contains(eventType)) {
-                    Toast.makeText(requireContext(), "Неправильный тип уведомления", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                event.setEventType(EventType.fromString(eventType));
+                filter.setEventType(eventType);
             }
             String teacher = binding.cvTeacher.paramItemEt.getText().toString();
             if (!teacher.isEmpty()) {
-                event.setTeacherName(teacher);
+                filter.setTeacher(teacher);
             }
             String date = binding.cvDate.paramItemEt.getText().toString();
             if (!date.isEmpty()) {
-                event.setDateFrom(date);
+                filter.setDate(date);
             }
             String reason = binding.cvReason.paramItemEt.getText().toString();
             if (!reason.isEmpty()) {
-                event.setReason(reason);
+                filter.setReason(reason);
             }
-
-            viewModel.requestEventList(event);
+            String status = binding.lessonSpinner.getSelectedItem().toString();
+            filter.setStatus(status);
+            viewModel.requestEventList(filter);
         });
         binding.btnCreate.setOnClickListener(v -> viewModel.createReport());
 
@@ -128,6 +128,7 @@ public class ReportFragment extends Fragment {
             binding.cvDate.paramItemEt.setText("");
             binding.cvReason.paramItemEt.setText("");
         });
+
 
         binding.ivShow.setOnClickListener(v -> {
             TransitionManager.beginDelayedTransition(binding.cvFilter, new AutoTransition());
